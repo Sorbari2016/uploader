@@ -1,0 +1,73 @@
+// Write schema, & models or relations
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Define models
+model User { 
+  id        Int       @id @default(autoincrement()) 
+  firstName String
+  lastName  String
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now()) 
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // Optional for soft-deletes
+
+  folders   Folder[] 
+  files     File[]
+
+  @@map("users")
+}
+
+model Folder {
+  id        Int       @id @default(autoincrement())
+  name      String?
+  owner_id  Int
+  owner     User      @relation(fields: [owner_id], references: [id]) 
+
+  parent_id Int?      // Optional, since root folders wont have parents
+  parent    Folder?   @relation("SubFolders", fields: [parent_id], references: [id])
+  children  Folder[]  @relation("SubFolders")
+
+  createdAt DateTime  @default(now()) 
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? 
+
+  files     File[]
+
+  @@index([owner_id, parent_id]) // Composite index for browsing directory
+  @@index([deletedAt])           // Fast filtering for active vs trashed folders
+
+  @@map("folders")
+}
+
+
+model File {
+  id           Int       @id @default(autoincrement())
+  name         String
+  storage_path String
+  size         Int
+  mimeType     String
+
+  owner_id     Int
+  owner        User      @relation(fields: [owner_id], references: [id])
+
+  folder_id    Int?  // files can be uploaded at root level
+  folder       Folder?   @relation(fields: [folder_id], references: [id])
+
+  createdAt    DateTime  @default(now()) 
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  @@index([owner_id, folder_id])
+  @@index([deletedAt])
+  @@index([mimeType])
+
+  @@map("files")
+}
