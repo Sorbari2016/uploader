@@ -1,0 +1,29 @@
+<header id="main-header">
+   <!-- Logo  -->
+  <div class="logo">
+    <a href="/" aria-label="Home page">
+      <img src="#" alt="Conduire logo" />
+    </a>
+  </div>
+
+  <!-- Conditionally render Profile btn, or login/sign up  -->
+   <% if (isLoggedIn) {%>
+     <div class="profile dropdown">
+            <a class="btn profile-btn" role="button">
+                <img src="/icons/default-user-profile.png" alt="profile icon"> 
+                <span class="profile-name"><%= username %></span>
+                <span class="dropdown-arrow">⏷</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="/profile"class="dropdown-item">Profile</a></li>
+                <li><a href="/logout"class="dropdown-item">Log out</a></li>
+            </ul>
+        </div>
+    <% } else {%> 
+        <div class="split-btns auth-btns">
+            <a href="/login" class="btn btn-login" role="button">Login</a>
+                <span class="divider">|</span>
+            <a href="/register" class="btn btn-signup" role="button">Sign up</a>
+        </div>
+    <% } %>
+</header>

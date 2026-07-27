@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%-include("../partials/head.ejs", {title: "Home page"}) %>
+
+<% // store user logged in status 
+    const isLoggedIn = !!user; 
+
+    // create a method to make names proper case
+     const toTitleCase = (str) => {
+        return str.replace(
+        /\w\S*/g,
+        text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+        );
+    };
+
+    // create username from first and last names
+    const username = 
+            user ? toTitleCase(user.first_name) + " " + toTitleCase(user.last_name) :  "";
+        
+%>
+
+</body>
+
+<%-include("../partials/header", {username}) %>
+
+<script src="/script/javaScript.js"></script>
+
+</body>
+
+</html>
