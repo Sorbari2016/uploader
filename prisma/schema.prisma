@@ -71,3 +71,11 @@ model File {
 
   @@map("files")
 }
+
+// Create model, store session details in db
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String  
+  expiresAt   DateTime
+}

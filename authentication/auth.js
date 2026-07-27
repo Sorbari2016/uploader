@@ -1,15 +1,14 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
-import { getUserByUsername, getUserById } from "../database/queries.js";
+import { getUserById, getUserByEmail } from "../database/queries.js";
 
 // Create a passport local strategy(username and password)
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
       // get user
-      const result = await getUserByUsername(username);
-      const user = result[0];
+      const user = await getUserByEmail(username);
 
       if (!user) {
         return done(null, false, { message: "Incorrect Email address" });
