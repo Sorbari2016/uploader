@@ -6,6 +6,7 @@ import session from "express-session";
 import passport from "passport";
 import { prisma } from "./lib/prisma.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
+import homeRouter from "./routes/homeRoutes.js";
 
 dotenv.config();
 
@@ -47,19 +48,7 @@ app.use(
 app.use(passport.session());
 
 // Routes
-app.get("/", (req, res) => {
-  res.send("Hello World !");
-});
-
-// Test if prisma session store is connected
-app.get("/test-session", (req, res) => {
-  if (req.session.views) {
-    req.session.views++;
-  } else {
-    req.session.views = 1;
-  }
-  res.send(`Session test active. View count: ${req.session.views}`);
-});
+app.use("/", homeRouter);
 
 app.use((err, req, res, next) => {
   console.error(err);
